@@ -1,0 +1,633 @@
+.switch {
+  font-size: 17px;
+  position: relative;
+  display: inline-block;
+  width: 64px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #73C0FC;
+  transition: .4s;
+  border-radius: 30px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 30px;
+  width: 30px;
+  border-radius: 20px;
+  left: 2px;
+  bottom: 2px;
+  z-index: 2;
+  background-color: #e8e8e8;
+  transition: .4s;
+}
+
+.sun svg {
+  position: absolute;
+  top: 6px;
+  left: 36px;
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+}
+
+.moon svg {
+  fill: #73C0FC;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+}
+
+/* .switch:hover */.sun svg {
+  animation: rotate 15s linear infinite;
+}
+
+@keyframes rotate {
+ 
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* .switch:hover */.moon svg {
+  animation: tilt 5s linear infinite;
+}
+
+@keyframes tilt {
+ 
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(-10deg);
+  }
+
+  75% {
+    transform: rotate(10deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.input:checked + .slider {
+  background-color: #183153;
+}
+
+.input:focus + .slider {
+  box-shadow: 0 0 1px #183153;
+}
+
+.input:checked + .slider:before {
+  transform: translateX(30px);
+}
+
+
+/* ========================================
+   MODERN UI ENHANCEMENTS
+   Added below - do not modify above
+   ======================================== */
+
+/* 1. GLASSMORPHISM & SHADOWS FOR MAIN SECTIONS */
+body > div > main > section {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 
+    0 8px 32px 0 rgba(31, 38, 135, 0.15),
+    0 2px 8px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark body > div > main > section {
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.4),
+    0 2px 8px 0 rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body > div > main > section:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 40px 0 rgba(31, 38, 135, 0.2),
+    0 4px 12px 0 rgba(0, 0, 0, 0.08);
+}
+
+.dark body > div > main > section:hover {
+  box-shadow: 
+    0 12px 40px 0 rgba(0, 0, 0, 0.5),
+    0 4px 12px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* 2. BUTTON HOVER ANIMATIONS */
+button {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Primary button (Tambah) enhanced glow */
+button[type="submit"]:not(#cancelEdit) {
+  box-shadow: 0 4px 14px 0 rgba(14, 165, 164, 0.39);
+  transition: all 0.3s ease;
+}
+
+button[type="submit"]:not(#cancelEdit):hover {
+  box-shadow: 0 6px 20px rgba(14, 165, 164, 0.5);
+  transform: translateY(-2px);
+}
+
+button[type="submit"]:not(#cancelEdit):active {
+  transform: scale(0.98);
+}
+
+/* Ripple effect on button click */
+button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+button:active::after {
+  width: 300px;
+  height: 300px;
+  opacity: 0;
+}
+
+/* 3. INPUT FIELD ENHANCEMENTS */
+input[type="text"],
+input[type="time"],
+select {
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+input[type="text"]:hover,
+input[type="time"]:hover,
+select:hover {
+  border-color: #0ea5a4;
+  box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.1);
+}
+
+input[type="text"]:focus,
+input[type="time"]:focus,
+select:focus {
+  border-color: #0ea5a4;
+  box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.2);
+  transform: translateY(-1px);
+}
+
+.dark input[type="text"],
+.dark input[type="time"],
+.dark select {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark input[type="text"]:hover,
+.dark input[type="time"]:hover,
+.dark select:hover {
+  border-color: #0ea5a4;
+  box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.15);
+}
+
+/* 4. TASK ITEM HOVER EFFECTS */
+#taskList > div {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+#taskList > div:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.1),
+    0 4px 10px rgba(0, 0, 0, 0.06);
+  border-color: #0ea5a4 !important;
+}
+
+.dark #taskList > div:hover {
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.4),
+    0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Subtle glow on task hover based on priority */
+#taskList > div[class*="border-red"]:hover {
+  box-shadow: 
+    0 10px 25px rgba(239, 68, 68, 0.15),
+    0 4px 10px rgba(239, 68, 68, 0.08);
+}
+
+#taskList > div[class*="border-yellow"]:hover {
+  box-shadow: 
+    0 10px 25px rgba(245, 158, 11, 0.15),
+    0 4px 10px rgba(245, 158, 11, 0.08);
+}
+
+#taskList > div[class*="border-green"]:hover {
+  box-shadow: 
+    0 10px 25px rgba(16, 185, 129, 0.15),
+    0 4px 10px rgba(16, 185, 129, 0.08);
+}
+
+/* 5. ENHANCED PROGRESS BAR */
+#progressBarInner {
+  background: linear-gradient(
+    90deg, 
+    #0ea5a4 0%, 
+    #06b6d4 35%,
+    #3b82f6 70%,
+    #6366f1 100%
+  );
+  box-shadow: 
+    0 2px 10px rgba(14, 165, 164, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated shine effect on progress bar */
+#progressBarInner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Pulsing glow when 100% */
+#progressBarInner.shadow-lg {
+  animation: progressPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes progressPulse {
+  0%, 100% {
+    box-shadow: 
+      0 2px 10px rgba(14, 165, 164, 0.4),
+      0 0 20px rgba(14, 165, 164, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 2px 15px rgba(14, 165, 164, 0.6),
+      0 0 30px rgba(14, 165, 164, 0.5);
+  }
+}
+
+/* 6. ENHANCED UNDO SNACKBAR */
+#undoSnackbar {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: rgba(30, 41, 59, 0.95);
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(14, 165, 164, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: snackbarSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark #undoSnackbar {
+  background: rgba(51, 65, 85, 0.95);
+}
+
+#undoSnackbar.hidden {
+  animation: snackbarSlideDown 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes snackbarSlideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes snackbarSlideDown {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+}
+
+#undoBtn {
+  transition: all 0.2s ease;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+#undoBtn:hover {
+  background: rgba(14, 165, 164, 0.2);
+  transform: scale(1.05);
+}
+
+/* 7. EDIT MODAL ENHANCEMENTS */
+#editModal {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: modalFadeIn 0.25s ease-out;
+}
+
+#editModal.hidden {
+  animation: modalFadeOut 0.2s ease-in;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+#editModal > div {
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(14, 165, 164, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 8. CHECKBOX ENHANCEMENTS */
+input[type="checkbox"] {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+input[type="checkbox"]:hover {
+  transform: scale(1.15);
+}
+
+input[type="checkbox"]:checked {
+  animation: checkboxPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes checkboxPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* 9. HEADER ENHANCEMENTS */
+header h1 span {
+  transition: transform 0.3s ease;
+}
+
+header h1:hover span {
+  transform: rotate(360deg);
+}
+
+/* 10. MOTIVATION TEXT ANIMATION */
+#motivation {
+  transition: all 0.3s ease;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(14, 165, 164, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+  border-left: 3px solid #0ea5a4;
+}
+
+.dark #motivation {
+  background: linear-gradient(135deg, rgba(14, 165, 164, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%);
+}
+
+/* 11. PRIORITY BADGE ENHANCEMENTS */
+#taskList span[class*="bg-red"],
+#taskList span[class*="bg-yellow"],
+#taskList span[class*="bg-green"] {
+  transition: all 0.2s ease;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+#taskList span[class*="bg-red"]:hover {
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+}
+
+#taskList span[class*="bg-yellow"]:hover {
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+}
+
+#taskList span[class*="bg-green"]:hover {
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+}
+
+/* 12. CUSTOM SCROLLBAR STYLING */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #0ea5a4 0%, #06b6d4 100%);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #0d9190 0%, #0891b2 100%);
+  border: 2px solid rgba(14, 165, 164, 0.2);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #0ea5a4 0%, #3b82f6 100%);
+}
+
+/* 13. EMPTY STATE ENHANCEMENT */
+#emptyState {
+  transition: all 0.3s ease;
+  font-style: italic;
+}
+
+#emptyState:hover {
+  transform: scale(1.02);
+  color: #0ea5a4;
+}
+
+/* 14. SORT DROPDOWN ENHANCEMENT */
+#sortBy {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#sortBy:hover {
+  border-color: #0ea5a4;
+  box-shadow: 0 2px 8px rgba(14, 165, 164, 0.2);
+}
+
+/* 15. FADE-IN ANIMATIONS FOR PAGE LOAD */
+@keyframes pageElementFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+header {
+  animation: pageElementFadeIn 0.6s ease-out;
+}
+
+main > section:nth-child(1) {
+  animation: pageElementFadeIn 0.6s ease-out 0.1s both;
+}
+
+main > section:nth-child(2) {
+  animation: pageElementFadeIn 0.6s ease-out 0.2s both;
+}
+
+/* 16. SMOOTH TRANSITIONS FOR DARK MODE */
+body,
+body * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+button,
+input,
+select {
+  transition: all 0.3s ease;
+}
+
+/* 17. DELETE BUTTON DANGER HOVER */
+.delete-btn {
+  transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+  transform: scale(1.05);
+}
+
+.dark .delete-btn:hover {
+  background: rgba(239, 68, 68, 0.2) !important;
+}
+
+/* 18. EDIT BUTTON HOVER */
+.edit-btn {
+  transition: all 0.2s ease;
+}
+
+.edit-btn:hover {
+  background: rgba(14, 165, 164, 0.1) !important;
+  border-color: #0ea5a4 !important;
+  color: #0ea5a4 !important;
+  transform: scale(1.05);
+}
+
+.dark .edit-btn:hover {
+  background: rgba(14, 165, 164, 0.2) !important;
+}
+
+/* 19. FOCUS VISIBLE STYLES FOR ACCESSIBILITY */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #0ea5a4;
+  outline-offset: 2px;
+}
+
+/* 20. LOADING SHIMMER EFFECT (for future use) */
+@keyframes shimmerLoading {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.loading-shimmer {
+  animation: shimmerLoading 2s infinite linear;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+}
