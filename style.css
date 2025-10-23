@@ -1,633 +1,254 @@
-.switch {
-  font-size: 17px;
-  position: relative;
-  display: inline-block;
-  width: 64px;
-  height: 34px;
+/*
+  Refactored stylesheet: variables, ordering, accessibility, performance.
+  - Kept all existing IDs and classes unchanged.
+  - Uses CSS variables for colors, spacing, radii, and motion.
+  - Adds reduced-motion preference, improved focus states, and mobile tweaks.
+*/
+
+:root{
+  /* Color scale (light theme) */
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --muted: #64748b; /* text muted */
+  --text: #0f172a;
+  --accent-1: #0ea5a4; /* teal */
+  --accent-2: #06b6d4; /* cyan */
+  --accent-3: #3b82f6; /* blue */
+  --accent-4: #6366f1; /* indigo */
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --success: #10b981;
+
+  /* UI */
+  --glass-border: rgba(255,255,255,0.18);
+  --glass-shadow: 0 8px 32px rgba(31,38,135,0.15);
+
+  /* Sizes */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --gap-xs: 0.25rem;
+  --gap-sm: 0.5rem;
+  --gap: 1rem;
+
+  /* Motion */
+  --motion-fast: 150ms;
+  --motion: 300ms;
+
+  /* Typography */
+  --base-font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 }
 
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+/* Dark theme overrides (via .dark on root document element) */
+.dark{
+  --bg: #0b1220;
+  --surface: #071025;
+  --muted: #cbd5e1;
+  --text: #e6eef8;
+  --glass-border: rgba(255,255,255,0.05);
 }
 
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #73C0FC;
-  transition: .4s;
-  border-radius: 30px;
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root{ --motion: 1ms; --motion-fast: 1ms; }
+  *{ animation-duration: 1ms !important; transition-duration: 1ms !important; }
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 30px;
-  width: 30px;
-  border-radius: 20px;
-  left: 2px;
-  bottom: 2px;
-  z-index: 2;
-  background-color: #e8e8e8;
-  transition: .4s;
+/* Base element reset / sensible defaults (non intrusive) */
+html,body{ height:100%; }
+body{
+  font-family: var(--base-font);
+  color: var(--text);
+  background: var(--bg);
+  line-height:1.4;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
-.sun svg {
-  position: absolute;
-  top: 6px;
-  left: 36px;
-  z-index: 1;
-  width: 24px;
-  height: 24px;
-}
-
-.moon svg {
-  fill: #73C0FC;
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  z-index: 1;
-  width: 24px;
-  height: 24px;
-}
-
-/* .switch:hover */.sun svg {
-  animation: rotate 15s linear infinite;
-}
-
-@keyframes rotate {
- 
-  0% {
-    transform: rotate(0);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* .switch:hover */.moon svg {
-  animation: tilt 5s linear infinite;
-}
-
-@keyframes tilt {
- 
-  0% {
-    transform: rotate(0deg);
-  }
-
-  25% {
-    transform: rotate(-10deg);
-  }
-
-  75% {
-    transform: rotate(10deg);
-  }
-
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
-.input:checked + .slider {
-  background-color: #183153;
-}
-
-.input:focus + .slider {
-  box-shadow: 0 0 1px #183153;
-}
-
-.input:checked + .slider:before {
-  transform: translateX(30px);
-}
-
-
-/* ========================================
-   MODERN UI ENHANCEMENTS
-   Added below - do not modify above
-   ======================================== */
-
-/* 1. GLASSMORPHISM & SHADOWS FOR MAIN SECTIONS */
-body > div > main > section {
+/* ---------------- Main section (glass) ---------------- */
+/* kept original specificity: body > div > main > section */
+body > div > main > section{
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 
-    0 8px 32px 0 rgba(31, 38, 135, 0.15),
-    0 2px 8px 0 rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform var(--motion) ease, box-shadow var(--motion) ease;
 }
+
+.dark body > div > main > section{
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+body > div > main > section:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(31,38,135,0.18), 0 4px 12px rgba(0,0,0,0.08);
+}
 
-.dark body > div > main > section {
-  box-shadow: 
-    0 8px 32px 0 rgba(0, 0, 0, 0.4),
-    0 2px 8px 0 rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-body > div > main > section:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 12px 40px 0 rgba(31, 38, 135, 0.2),
-    0 4px 12px 0 rgba(0, 0, 0, 0.08);
-}
-
-.dark body > div > main > section:hover {
-  box-shadow: 
-    0 12px 40px 0 rgba(0, 0, 0, 0.5),
-    0 4px 12px 0 rgba(0, 0, 0, 0.3);
-}
-
-/* 2. BUTTON HOVER ANIMATIONS */
-button {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Primary button (Tambah) enhanced glow */
-button[type="submit"]:not(#cancelEdit) {
-  box-shadow: 0 4px 14px 0 rgba(14, 165, 164, 0.39);
-  transition: all 0.3s ease;
-}
-
-button[type="submit"]:not(#cancelEdit):hover {
-  box-shadow: 0 6px 20px rgba(14, 165, 164, 0.5);
-  transform: translateY(-2px);
-}
-
-button[type="submit"]:not(#cancelEdit):active {
-  transform: scale(0.98);
-}
-
-/* Ripple effect on button click */
-button::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-}
-
-button:active::after {
-  width: 300px;
-  height: 300px;
-  opacity: 0;
-}
-
-/* 3. INPUT FIELD ENHANCEMENTS */
-input[type="text"],
-input[type="time"],
-select {
-  transition: all 0.3s ease;
-  border: 1px solid #e2e8f0;
-}
-
-input[type="text"]:hover,
-input[type="time"]:hover,
-select:hover {
-  border-color: #0ea5a4;
-  box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.1);
-}
-
-input[type="text"]:focus,
-input[type="time"]:focus,
-select:focus {
-  border-color: #0ea5a4;
-  box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.2);
-  transform: translateY(-1px);
-}
-
-.dark input[type="text"],
-.dark input[type="time"],
-.dark select {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.dark input[type="text"]:hover,
-.dark input[type="time"]:hover,
-.dark select:hover {
-  border-color: #0ea5a4;
-  box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.15);
-}
-
-/* 4. TASK ITEM HOVER EFFECTS */
-#taskList > div {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-}
-
-#taskList > div:hover {
-  transform: translateY(-3px) scale(1.01);
-  box-shadow: 
-    0 10px 25px rgba(0, 0, 0, 0.1),
-    0 4px 10px rgba(0, 0, 0, 0.06);
-  border-color: #0ea5a4 !important;
-}
-
-.dark #taskList > div:hover {
-  box-shadow: 
-    0 10px 25px rgba(0, 0, 0, 0.4),
-    0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Subtle glow on task hover based on priority */
-#taskList > div[class*="border-red"]:hover {
-  box-shadow: 
-    0 10px 25px rgba(239, 68, 68, 0.15),
-    0 4px 10px rgba(239, 68, 68, 0.08);
-}
-
-#taskList > div[class*="border-yellow"]:hover {
-  box-shadow: 
-    0 10px 25px rgba(245, 158, 11, 0.15),
-    0 4px 10px rgba(245, 158, 11, 0.08);
-}
-
-#taskList > div[class*="border-green"]:hover {
-  box-shadow: 
-    0 10px 25px rgba(16, 185, 129, 0.15),
-    0 4px 10px rgba(16, 185, 129, 0.08);
-}
-
-/* 5. ENHANCED PROGRESS BAR */
-#progressBarInner {
-  background: linear-gradient(
-    90deg, 
-    #0ea5a4 0%, 
-    #06b6d4 35%,
-    #3b82f6 70%,
-    #6366f1 100%
-  );
-  box-shadow: 
-    0 2px 10px rgba(14, 165, 164, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Animated shine effect on progress bar */
-#progressBarInner::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
-  );
-  animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
-
-/* Pulsing glow when 100% */
-#progressBarInner.shadow-lg {
-  animation: progressPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes progressPulse {
-  0%, 100% {
-    box-shadow: 
-      0 2px 10px rgba(14, 165, 164, 0.4),
-      0 0 20px rgba(14, 165, 164, 0.3);
-  }
-  50% {
-    box-shadow: 
-      0 2px 15px rgba(14, 165, 164, 0.6),
-      0 0 30px rgba(14, 165, 164, 0.5);
-  }
-}
-
-/* 6. ENHANCED UNDO SNACKBAR */
-#undoSnackbar {
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  background: rgba(30, 41, 59, 0.95);
-  box-shadow: 
-    0 10px 40px rgba(0, 0, 0, 0.3),
-    0 0 20px rgba(14, 165, 164, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  animation: snackbarSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dark #undoSnackbar {
-  background: rgba(51, 65, 85, 0.95);
-}
-
-#undoSnackbar.hidden {
-  animation: snackbarSlideDown 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes snackbarSlideUp {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-@keyframes snackbarSlideDown {
-  from {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(-50%) translateY(20px);
-  }
-}
-
-#undoBtn {
-  transition: all 0.2s ease;
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-
-#undoBtn:hover {
-  background: rgba(14, 165, 164, 0.2);
-  transform: scale(1.05);
-}
-
-/* 7. EDIT MODAL ENHANCEMENTS */
-#editModal {
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  animation: modalFadeIn 0.25s ease-out;
-}
-
-#editModal.hidden {
-  animation: modalFadeOut 0.2s ease-in;
-}
-
-@keyframes modalFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes modalFadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
+.dark body > div > main > section:hover{
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* ---------------- Switch / Theme Toggle ---------------- */
+.switch{
+  display:inline-block;
+  position:relative;
+  width:64px;
+  height:34px;
+  font-size:0.95rem;
+}
+.switch input{ position:absolute; inset:0; width:100%; height:100%; opacity:0; margin:0; }
+.slider{
+  position:absolute; inset:0; border-radius:999px;
+  background: linear-gradient(180deg,var(--accent-2),var(--accent-1));
+  transition: background var(--motion), box-shadow var(--motion);
+}
+.slider::before{
+  content:''; position:absolute; left:4px; bottom:4px; width:26px; height:26px; border-radius:50%;
+  background: #fff; box-shadow: 0 2px 6px rgba(2,6,23,0.08); transition: transform var(--motion);
+}
+.input:checked + .slider{ background: linear-gradient(180deg,#183153,var(--accent-3)); }
+.input:checked + .slider::before{ transform: translateX(30px); }
+.input:focus + .slider{ box-shadow: 0 0 0 3px rgba(14,165,164,0.12); }
+
+.sun svg, .moon svg{ width:20px; height:20px; position:absolute; z-index:1 }
+.sun svg{ right:6px; top:7px; animation: rotate 15s linear infinite; }
+.moon svg{ left:6px; top:7px; fill:var(--accent-2); animation: tilt 5s linear infinite; }
+
+@keyframes rotate{ to{ transform: rotate(360deg);} }
+@keyframes tilt{ 25%{ transform: rotate(-8deg);} 75%{ transform: rotate(8deg);} }
+
+/* ---------------- Buttons (global) ---------------- */
+button{
+  font-family:inherit; cursor:pointer; border-radius:var(--radius-sm); border:1px solid transparent;
+  padding:0.45rem 0.75rem; background:transparent; color:inherit; position:relative; overflow:hidden;
+  transition: transform var(--motion) cubic-bezier(.4,0,.2,1), box-shadow var(--motion);
+}
+button:hover{ transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+button:active{ transform: translateY(0); box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+
+/* Primary submit (kept existing selector) */
+button[type="submit"]:not(#cancelEdit){
+  background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#fff; border-color:transparent;
+  box-shadow: 0 6px 20px rgba(14,165,164,0.35);
+}
+button[type="submit"]:not(#cancelEdit):hover{ box-shadow: 0 8px 28px rgba(14,165,164,0.45); transform: translateY(-3px); }
+button[type="submit"]:not(#cancelEdit):active{ transform: scale(.98); }
+
+/* Subtle ripple using transform scaled pseudo element (keeps original behaviour) */
+button::after{ content:''; position:absolute; inset:50% 50% auto auto; width:0; height:0; border-radius:50%; background: rgba(255,255,255,0.15); transform: translate(-50%,-50%); transition: width .6s ease, height .6s ease, opacity .6s; pointer-events:none }
+button:active::after{ width:340px; height:340px; opacity:0 }
+
+.delete-btn, .edit-btn{ transition: transform var(--motion), background var(--motion), color var(--motion); }
+.delete-btn:hover{ background: rgba(239,68,68,0.06) !important; border-color:var(--danger) !important; color:var(--danger) !important; transform: scale(1.05); }
+.dark .delete-btn:hover{ background: rgba(239,68,68,0.12) !important }
+.edit-btn:hover{ background: rgba(14,165,164,0.06) !important; border-color:var(--accent-1) !important; color:var(--accent-1) !important; transform: scale(1.05); }
+.dark .edit-btn:hover{ background: rgba(14,165,164,0.12) !important }
+
+/* ---------------- Form controls (inputs/selects) ---------------- */
+input[type="text"], input[type="time"], select{
+  padding:0.45rem 0.6rem; border-radius:var(--radius-sm); border:1px solid #e2e8f0; background:transparent; color:inherit;
+  transition: box-shadow var(--motion), border-color var(--motion), transform var(--motion);
+}
+input[type="text"]:hover, input[type="time"]:hover, select:hover{ border-color:var(--accent-1); box-shadow: 0 0 0 3px rgba(14,165,164,0.08); }
+input[type="text"]:focus, input[type="time"]:focus, select:focus{ outline:none; border-color:var(--accent-1); box-shadow: 0 0 0 4px rgba(14,165,164,0.14); transform: translateY(-1px); }
+.dark input[type="text"], .dark input[type="time"], .dark select{ border-color: rgba(255,255,255,0.1); }
+
+input[type="checkbox"]{ cursor:pointer; transition: transform var(--motion-fast); }
+input[type="checkbox"]:hover{ transform: scale(1.12); }
+input[type="checkbox"]:checked{ animation: checkboxPop .3s cubic-bezier(.68,-.55,.265,1.55); }
+@keyframes checkboxPop{ 50%{ transform: scale(1.18); } }
+
+/* ---------------- Task list / item interactions ---------------- */
+#taskList > div{ transition: transform var(--motion) cubic-bezier(.4,0,.2,1), box-shadow var(--motion); cursor:pointer }
+#taskList > div:hover{ transform: translateY(-6px) scale(1.01); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-color:var(--accent-1) !important }
+.dark #taskList > div:hover{ box-shadow: 0 10px 25px rgba(0,0,0,0.4) }
+
+/* Priority glow variants (kept original class-based selectors) */
+#taskList > div[class*="border-red"]:hover{ box-shadow: 0 10px 25px rgba(239,68,68,0.15) }
+#taskList > div[class*="border-yellow"]:hover{ box-shadow: 0 10px 25px rgba(245,158,11,0.15) }
+#taskList > div[class*="border-green"]:hover{ box-shadow: 0 10px 25px rgba(16,185,129,0.15) }
+
+#taskList span[class*="bg-red"], #taskList span[class*="bg-yellow"], #taskList span[class*="bg-green"]{
+  transition: box-shadow var(--motion), transform var(--motion); font-weight:600; letter-spacing:0.4px; text-transform:uppercase; font-size:10px;
+}
+#taskList span[class*="bg-red"]:hover{ box-shadow:0 0 12px rgba(239,68,68,0.6) }
+#taskList span[class*="bg-yellow"]:hover{ box-shadow:0 0 12px rgba(245,158,11,0.6) }
+#taskList span[class*="bg-green"]:hover{ box-shadow:0 0 12px rgba(16,185,129,0.6) }
+
+/* ---------------- Progress bar ---------------- */
+#progressBarInner{ position:relative; overflow:hidden; border-radius:999px; background: linear-gradient(90deg, var(--accent-1) 0%, var(--accent-2) 35%, var(--accent-3) 70%, var(--accent-4) 100%); box-shadow: 0 2px 10px rgba(14,165,164,0.35), inset 0 1px 0 rgba(255,255,255,0.2) }
+#progressBarInner::before{ content:''; position:absolute; top:0; left:-120%; width:120%; height:100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent); animation: shimmer 2.2s linear infinite }
+@keyframes shimmer{ 0%{ left:-120%; } 100%{ left:120%; } }
+
+.shadow-lg#progressBarInner{ animation: progressPulse 1.6s ease-in-out infinite }
+@keyframes progressPulse{ 50%{ box-shadow: 0 2px 15px rgba(14,165,164,0.6), 0 0 30px rgba(14,165,164,0.45) } }
+
+/* ---------------- Undo snackbar ---------------- */
+#undoSnackbar{ backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); background: rgba(30,41,59,0.95); border:1px solid rgba(255,255,255,0.08); border-radius:var(--radius-md); padding:0.5rem 0.75rem; box-shadow: 0 10px 40px rgba(0,0,0,0.28) }
+.dark #undoSnackbar{ background: rgba(51,65,85,0.95) }
+#undoSnackbar.hidden{ animation: snackbarSlideDown .25s cubic-bezier(.4,0,.2,1) }
+@keyframes snackbarSlideUp{ from{ opacity:0; transform: translateY(12px) } to{ opacity:1; transform:none } }
+@keyframes snackbarSlideDown{ from{ opacity:1 } to{ opacity:0; transform: translateY(12px) } }
+#undoBtn{ padding:.35rem .6rem; border-radius:4px; transition: transform var(--motion), background var(--motion) }
+#undoBtn:hover{ background: rgba(14,165,164,0.12); transform: scale(1.03) }
+
+/* ---------------- Edit modal ---------------- */
+#editModal{ backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); animation: modalFadeIn .25s ease-out }
+#editModal.hidden{ animation: modalFadeOut .2s ease-in }
+@keyframes modalFadeIn{ from{ opacity:0 } to{ opacity:1 } }
+@keyframes modalFadeOut{ from{ opacity:1 } to{ opacity:0 } }
+#editModal > div{ box-shadow: 0 20px 60px rgba(0,0,0,0.32); border-radius:var(--radius-md); border:1px solid rgba(255,255,255,0.08) }
+
+/* ---------------- Header / motivation / page animations ---------------- */
+header h1 span{ transition: transform var(--motion) }
+header h1:hover span{ transform: rotate(360deg) }
+#motivation{ transition: background var(--motion), transform var(--motion); padding:.5rem .75rem; border-radius:8px; background: linear-gradient(135deg, rgba(14,165,164,0.08), rgba(99,102,241,0.08)); border-left:3px solid var(--accent-1) }
+.dark #motivation{ background: linear-gradient(135deg, rgba(14,165,164,0.12), rgba(99,102,241,0.12)) }
+
+@keyframes pageElementFadeIn{ from{ opacity:0; transform: translateY(20px) } to{ opacity:1; transform:none } }
+header{ animation: pageElementFadeIn .6s ease-out }
+main > section:nth-child(1){ animation: pageElementFadeIn .6s ease-out .1s both }
+main > section:nth-child(2){ animation: pageElementFadeIn .6s ease-out .2s both }
+
+/* ---------------- Empty state ---------------- */
+#emptyState{ font-style:italic; transition: transform var(--motion), color var(--motion) }
+#emptyState:hover{ transform: scale(1.02); color:var(--accent-1) }
+
+/* ---------------- Sort select small style ---------------- */
+#sortBy{ cursor:pointer; transition: box-shadow var(--motion), border-color var(--motion) }
+#sortBy:hover{ border-color:var(--accent-1); box-shadow: 0 2px 8px rgba(14,165,164,0.18) }
+
+/* ---------------- Loading shimmer utility ---------------- */
+@keyframes shimmerLoading{ 0%{ background-position: -1000px 0 } 100%{ background-position: 1000px 0 } }
+.loading-shimmer{ animation: shimmerLoading 2s infinite linear; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%); background-size:1000px 100% }
+
+/* ---------------- Radio segmented control ---------------- */
+.radio-inputs{ display:flex; gap:var(--gap-xs); flex-wrap:nowrap; border-radius:.5rem; background-color:#EEE; box-sizing:border-box; box-shadow:0 0 0 1px rgba(0,0,0,0.06); padding:.25rem; width:100%; font-size:14px; align-items:center }
+.radio-inputs.w-48{ width:12rem }
+.radio-inputs .radio{ flex:1 1 auto; text-align:center }
+.radio-inputs .radio input{ display:none }
+.radio-inputs .radio .name{ display:flex; cursor:pointer; align-items:center; justify-content:center; border-radius:.5rem; padding:.45rem 0; color:rgba(51,65,85,1); transition: transform .15s ease-in-out; user-select:none; font-weight:500; font-size:.9rem }
+.radio-inputs .radio .name:hover{ transform: translateY(-2px); box-shadow: 0 6px 14px rgba(2,6,23,0.04) }
+.radio-inputs .radio input:checked + .name{ background:#fff; font-weight:600; box-shadow:0 4px 12px rgba(2,6,23,0.06); color:#0f172a }
+.dark .radio-inputs{ background-color: rgba(255,255,255,0.03); box-shadow:0 0 0 1px rgba(255,255,255,0.02) }
+.dark .radio-inputs .radio .name{ color: rgba(226,232,240,0.95) }
+.dark .radio-inputs .radio input:checked + .name{ background-color: rgba(255,255,255,0.04); color:#fff; box-shadow:0 4px 12px rgba(2,6,23,0.25) }
+@media (max-width:420px){ .radio-inputs .radio .name{ padding:.4rem 0; font-size:13px } .radio-inputs.w-48{ width:10.5rem } }
+
+/* ---------------- Scrollbar styling (WebKit only) ---------------- */
+::-webkit-scrollbar{ width:10px; height:10px }
+::-webkit-scrollbar-track{ background:#f1f5f9; border-radius:10px }
+.dark ::-webkit-scrollbar-track{ background:#1e293b }
+::-webkit-scrollbar-thumb{ background: linear-gradient(180deg, var(--accent-1) 0%, var(--accent-2) 100%); border-radius:10px; border:2px solid transparent; background-clip:padding-box; transition: background .3s }
+::-webkit-scrollbar-thumb:hover{ background: linear-gradient(180deg, #0d9190 0%, #0891b2 100%); border:2px solid rgba(14,165,164,0.18) }
+.dark ::-webkit-scrollbar-thumb{ background: linear-gradient(180deg, var(--accent-1) 0%, var(--accent-3) 100%) }
+
+/* ---------------- Focus-visible accessibility ---------------- */
+button:focus-visible, input:focus-visible, select:focus-visible{ outline:2px solid var(--accent-1); outline-offset:2px }
+
+/* ---------------- Universal transitions (reduced) ---------------- */
+/* Keep lightweight: prefer explicit transitions per component above */
+body *{ transition: background-color .18s ease, color .18s ease, border-color .18s ease }
 
-#editModal > div {
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.3),
-    0 0 40px rgba(14, 165, 164, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* 8. CHECKBOX ENHANCEMENTS */
-input[type="checkbox"] {
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-input[type="checkbox"]:hover {
-  transform: scale(1.15);
-}
-
-input[type="checkbox"]:checked {
-  animation: checkboxPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-@keyframes checkboxPop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
-}
-
-/* 9. HEADER ENHANCEMENTS */
-header h1 span {
-  transition: transform 0.3s ease;
-}
-
-header h1:hover span {
-  transform: rotate(360deg);
-}
-
-/* 10. MOTIVATION TEXT ANIMATION */
-#motivation {
-  transition: all 0.3s ease;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, rgba(14, 165, 164, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
-  border-left: 3px solid #0ea5a4;
-}
-
-.dark #motivation {
-  background: linear-gradient(135deg, rgba(14, 165, 164, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%);
-}
-
-/* 11. PRIORITY BADGE ENHANCEMENTS */
-#taskList span[class*="bg-red"],
-#taskList span[class*="bg-yellow"],
-#taskList span[class*="bg-green"] {
-  transition: all 0.2s ease;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-size: 10px;
-}
-
-#taskList span[class*="bg-red"]:hover {
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
-}
-
-#taskList span[class*="bg-yellow"]:hover {
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
-}
-
-#taskList span[class*="bg-green"]:hover {
-  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
-}
-
-/* 12. CUSTOM SCROLLBAR STYLING */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 10px;
-}
-
-.dark ::-webkit-scrollbar-track {
-  background: #1e293b;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #0ea5a4 0%, #06b6d4 100%);
-  border-radius: 10px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  transition: all 0.3s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #0d9190 0%, #0891b2 100%);
-  border: 2px solid rgba(14, 165, 164, 0.2);
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #0ea5a4 0%, #3b82f6 100%);
-}
-
-/* 13. EMPTY STATE ENHANCEMENT */
-#emptyState {
-  transition: all 0.3s ease;
-  font-style: italic;
-}
-
-#emptyState:hover {
-  transform: scale(1.02);
-  color: #0ea5a4;
-}
-
-/* 14. SORT DROPDOWN ENHANCEMENT */
-#sortBy {
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-#sortBy:hover {
-  border-color: #0ea5a4;
-  box-shadow: 0 2px 8px rgba(14, 165, 164, 0.2);
-}
-
-/* 15. FADE-IN ANIMATIONS FOR PAGE LOAD */
-@keyframes pageElementFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-header {
-  animation: pageElementFadeIn 0.6s ease-out;
-}
-
-main > section:nth-child(1) {
-  animation: pageElementFadeIn 0.6s ease-out 0.1s both;
-}
-
-main > section:nth-child(2) {
-  animation: pageElementFadeIn 0.6s ease-out 0.2s both;
-}
-
-/* 16. SMOOTH TRANSITIONS FOR DARK MODE */
-body,
-body * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-button,
-input,
-select {
-  transition: all 0.3s ease;
-}
-
-/* 17. DELETE BUTTON DANGER HOVER */
-.delete-btn {
-  transition: all 0.2s ease;
-}
-
-.delete-btn:hover {
-  background: rgba(239, 68, 68, 0.1) !important;
-  border-color: #ef4444 !important;
-  color: #ef4444 !important;
-  transform: scale(1.05);
-}
-
-.dark .delete-btn:hover {
-  background: rgba(239, 68, 68, 0.2) !important;
-}
-
-/* 18. EDIT BUTTON HOVER */
-.edit-btn {
-  transition: all 0.2s ease;
-}
-
-.edit-btn:hover {
-  background: rgba(14, 165, 164, 0.1) !important;
-  border-color: #0ea5a4 !important;
-  color: #0ea5a4 !important;
-  transform: scale(1.05);
-}
-
-.dark .edit-btn:hover {
-  background: rgba(14, 165, 164, 0.2) !important;
-}
-
-/* 19. FOCUS VISIBLE STYLES FOR ACCESSIBILITY */
-button:focus-visible,
-input:focus-visible,
-select:focus-visible {
-  outline: 2px solid #0ea5a4;
-  outline-offset: 2px;
-}
-
-/* 20. LOADING SHIMMER EFFECT (for future use) */
-@keyframes shimmerLoading {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
-}
-
-.loading-shimmer {
-  animation: shimmerLoading 2s infinite linear;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  background-size: 1000px 100%;
-}
